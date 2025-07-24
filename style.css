@@ -1542,3 +1542,45 @@ opacity: 1;
   /* bump your grid and content up one layer if needed */
   .hero::before { z-index: 1; }
   .hero-content  { z-index: 2; }
+
+/* Header bar: fixed height, relative for absolute child */
+.header-bar {
+    position: relative;
+    height: 40px;               /* fixed navbar height */
+    background-color: var(--secondary-dark);
+    overflow: visible;          /* allow headshot overflow */
+    box-shadow: 0 2px 10px rgba(0,0,0,0.3);
+}
+
+/* Container for logo + links */
+.header-container {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    height: 100%;               /* fill header-bar vertically */
+    padding: 0 1.5rem;
+}
+
+/* Profile headshot absolutely positioned */
+.header-profile {
+    position: absolute;
+    top: 50%;
+    left: 14rem;                 /* adjust horizontal spacing to NEBA */
+    transform: translateY(-50%);/* vertically center within header */
+    z-index: 10;
+}
+
+/* Profile image styling */
+.profile-pic {
+    width: 100px;
+    height: 100px;
+    border-radius: 50%;
+    object-fit: cover;
+    border: 2px solid #FFDBBB; /* light orange border */
+    box-shadow: 0 3px 8px rgba(0,0,0,0.2);
+    transition: transform 0.3s ease;
+}
+.profile-pic:hover {
+    transform: translateY(-3px) scale(1.1);
+    box-shadow: 0 0 20px rgba(0, 238, 255, 0.8);
+}
