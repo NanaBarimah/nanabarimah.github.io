@@ -1516,3 +1516,29 @@ opacity: 1;
         flex-direction: column;
     }
 }
+
+.hero {
+    position: relative;
+    overflow: hidden;
+  }
+  
+  /* new faint Docker background */
+  .hero::after {
+    content: "";
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    width: 90%;
+    height: 90%;
+    background: url('assets/docker-whale.svg') no-repeat center center;
+    background-size: contain;
+    opacity: 0.05;        /* really faint */
+    transform: translate(-50%, -50%);
+    pointer-events: none; /* so it never interferes with clicks */
+    z-index: 0;           /* behind the grid (::before is z-index:1), and behind your content (z-index:2) */
+    opacity: 0.2;   
+  }
+  
+  /* bump your grid and content up one layer if needed */
+  .hero::before { z-index: 1; }
+  .hero-content  { z-index: 2; }
