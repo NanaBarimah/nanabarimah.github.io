@@ -111,3 +111,30 @@ if (binary) {
     }
   }, 1000);
 }
+
+// debug logging to confirm script ran:
+console.log("🔧 DevOps keyword rotator script loaded");
+
+document.addEventListener("DOMContentLoaded", () => {
+  const keywords = [ "Deploy", "Scale", "Monitor", "Automate", "Optimize" ];
+  let idx = 0;
+  const el  = document.getElementById("devops-keyword");
+
+  if (!el) {
+    console.error("❌ #devops-keyword element not found!");
+    return;
+  }
+
+  function rotateKeyword() {
+    el.classList.remove("visible");
+    setTimeout(() => {
+      el.textContent = keywords[idx];
+      el.classList.add("visible");
+      idx = (idx + 1) % keywords.length;
+    }, 500);
+  }
+
+  // run immediately, then every 3s
+  rotateKeyword();
+  setInterval(rotateKeyword, 3000);
+});
