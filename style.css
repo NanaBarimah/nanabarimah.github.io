@@ -885,6 +885,25 @@ nav {
 }
 
 /* ====================
+   Publication Section
+   ==================== */
+/* restore bullets in Publications section only */
+.publications ul {
+list-style-type: disc;      /* turn bullets back on */
+padding-left: 1.5rem;       /* indent the list */
+}
+
+.publications ul li {
+margin-bottom: 0.75rem;     /* a bit of breathing room */
+}
+
+/* optional: color them in your accent tone */
+.publications ul li::marker {
+color: var(--accent-color);
+font-size: 1.1em;           /* slightly larger marker */
+}
+
+/* ====================
    Trainings & Courses Section
    ==================== */
    .trainings {
