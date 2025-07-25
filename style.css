@@ -1584,3 +1584,28 @@ opacity: 1;
     transform: translateY(-3px) scale(1.1);
     box-shadow: 0 0 20px rgba(0, 238, 255, 0.8);
 }
+/* Adjust headshot on small screens for mobile view */
+@media only screen and (max-width: 768px) {
+/* Show a smaller headshot on mobile, positioned before hamburger */
+    .header-profile {
+        display: block;
+        position: absolute;
+        top: 50%;
+        right: 4rem;             /* moved left from edge to avoid hamburger */
+        left: auto;
+        transform: translateY(-50%);
+        z-index: 10;
+    }
+
+    .profile-pic {
+        width: 40px;             /* smaller size */
+        height: 40px;
+        border: 1px solid #FFDBBB; /* thin light orange border */
+        box-shadow: 0 2px 4px rgba(0,0,0,0.2);
+        transition: transform 0.3s ease, box-shadow 0.3s ease;
+    }
+    .profile-pic:hover {
+        transform: translateY(-3px) scale(1.1);
+        box-shadow: 0 0 20px rgba(0, 238, 255, 0.8);
+    }
+}
