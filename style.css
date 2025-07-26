@@ -1580,4 +1580,8 @@ margin-right: 1.5rem;
     .timeline-item {
       padding: 10px 5px 10px 30px;
     }
+
+    .hero {
+      padding-top: 120px; 
+    }
 }
