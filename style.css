@@ -214,7 +214,8 @@ nav {
     display: flex;
     justify-content: space-between;
     align-items: center;
-    padding: 1rem 0;
+    /* padding: 1rem 0; */
+    position: relative;
 }
 
 .logo a {
@@ -558,9 +559,9 @@ nav {
 }
 
 .skill-item span {
-    color: var(--text-secondary);
-    font-weight: 500;
-    font-size: var(--fs-xs);
+    display: block;
+    white-space: normal;
+    word-break: break-word;
 }
 
 /* ====================
@@ -1409,59 +1410,6 @@ opacity: 1;
     }
 }
 
-/* Small devices (mobile phones, up to 768px) */
-@media only screen and (max-width: 768px) {
-    :root {
-        --fs-xl: 2.5rem;
-        --fs-l: 1.8rem;
-        --fs-m: 1.1rem;
-        --fs-s: 1rem;
-    }
-
-    .section-header {
-        margin-bottom: var(--spacing-m);
-    }
-
-    .skills-container {
-        gap: var(--spacing-m);
-    }
-
-    .skills-grid {
-        grid-template-columns: repeat(auto-fill, minmax(100px, 1fr));
-    }
-
-    .projects-grid,
-    .article-grid {
-        grid-template-columns: 1fr;
-    }
-
-    .timeline::after {
-        left: 15px;
-    }
-
-    .timeline-icon {
-        width: 30px;
-        height: 30px;
-        left: 0;
-    }
-
-    .timeline-icon i {
-        font-size: 0.9rem;
-    }
-
-    .timeline-item {
-        padding-left: 30px;
-    }
-
-    .certifications-grid {
-        grid-template-columns: 1fr;
-    }
-
-    .contact-form-container {
-        margin-top: var(--spacing-m);
-    }
-}
-
 /* Extra small devices (small mobile phones, up to 576px) */
 @media only screen and (max-width: 576px) {
     :root {
@@ -1580,15 +1528,17 @@ opacity: 1;
     padding: 0 1.5rem;
 }
 
-/* Profile headshot absolutely positioned */
-.header-profile {
-    position: absolute;
-    top: 50%;
-    left: 14rem;                 /* adjust horizontal spacing to NEBA */
-    transform: translateY(-50%);/* vertically center within header */
-    z-index: 10;
-}
+/* Give each child an explicit order */
+.header-profile { order: 1; }
+.logo           { order: 2; }
+.nav-links      { order: 3; }
+.hamburger      { order: 4; }
 
+/* spacing around the headshot */
+.header-profile {
+margin-right: 1.5rem;
+}
+  
 /* Profile image styling */
 .profile-pic {
     width: 100px;
@@ -1603,28 +1553,31 @@ opacity: 1;
     transform: translateY(-3px) scale(1.1);
     box-shadow: 0 0 20px rgba(0, 238, 255, 0.8);
 }
-/* Adjust headshot on small screens for mobile view */
+
+/* Mobile tweaks: shrink headshot and keep it before hamburger */
 @media only screen and (max-width: 768px) {
-/* Show a smaller headshot on mobile, positioned before hamburger */
+    .nav-links { display: none; }
+    .hamburger { display: block; }
+
     .header-profile {
-        display: block;
-        position: absolute;
-        top: 50%;
-        right: 4rem;             /* moved left from edge to avoid hamburger */
-        left: auto;
-        transform: translateY(-50%);
-        z-index: 10;
+        order: 1;   
+        margin-right: auto;
+    }
+    .logo {
+        order: 2;
+        margin-right: 1.5rem;
+    }
+    .hamburger {
+        order: 3;
     }
 
-    .profile-pic {
-        width: 40px;             /* smaller size */
-        height: 40px;
-        border: 1px solid #FFDBBB; /* thin light orange border */
-        box-shadow: 0 2px 4px rgba(0,0,0,0.2);
-        transition: transform 0.3s ease, box-shadow 0.3s ease;
+    .skills-grid {
+        grid-template-columns: repeat(auto-fill, minmax(120px, 1fr));
     }
-    .profile-pic:hover {
-        transform: translateY(-3px) scale(1.1);
-        box-shadow: 0 0 20px rgba(0, 238, 255, 0.8);
+}
+
+@media only screen and (max-width: 576px) {
+    .timeline-item {
+      padding: 10px 5px 10px 30px;
     }
 }
