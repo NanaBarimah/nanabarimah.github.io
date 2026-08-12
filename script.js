@@ -260,3 +260,201 @@ document.addEventListener("DOMContentLoaded", () => {
   }
   setTimeout(wave, 1600);
 });
+
+// Hero Docker whale — text image with a whole-image glitch (RGB split + slice
+// displacement + jitter) that triggers on hover, like the kobina.me portrait.
+document.addEventListener("DOMContentLoaded", () => {
+  const canvas = document.getElementById("whaleGlitch");
+  if (!canvas) return;
+  const ctx = canvas.getContext("2d");
+  const reduce = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+
+  const IMG_ASPECT = 756.26 / 596.9;
+  const WORDS = "DOCKER KUBERNETES TERRAFORM AWS CICD GITOPS PROMETHEUS GRAFANA ANSIBLE HELM GOLANG PYTHON BERT PYTORCH ";
+  const BLUE = "rgba(105,125,170,0.95)";   // base (slightly deeper for contrast)
+  const RED  = "rgba(240,45,70,0.9)";
+  const CYAN = "rgba(35,195,225,0.9)";
+
+  let rectW = 0, rectH = 0, fontSize = 11;
+  let baseBuf = null, redBuf = null, cyanBuf = null;
+  let startT = 0, firstBuild = true;
+  let raf = 0, lastRender = 0, hovering = false, running = false;
+  let lastTick = -1, slices = [], jitter = { x: 0, y: 0 }, split = 3;
+  // occupancy grid of the whale silhouette, for hover hit-testing
+  let mask = null, gDx = 0, gDy = 0, gCw = 1, gChh = 1, gCols = 0, gRows = 0;
+
+  const img = new Image();
+  let imgReady = false;
+  img.onload = () => { imgReady = true; build(); };
+  img.src = "assets/docker-whale.svg";
+
+  function renderBuffer(color, cells) {
+    const b = document.createElement("canvas");
+    b.width = rectW; b.height = rectH;
+    const bx = b.getContext("2d");
+    bx.textBaseline = "top";
+    bx.font = "700 " + fontSize + 'px "Space Mono", ui-monospace, monospace';
+    bx.fillStyle = color;
+    for (let i = 0; i < cells.length; i++) bx.fillText(cells[i].ch, cells[i].x, cells[i].y);
+    return b;
+  }
+
+  function build() {
+    const rect = canvas.getBoundingClientRect();
+    if (!imgReady || rect.width < 5) return;
+    rectW = Math.round(rect.width); rectH = Math.round(rect.height);
+    // dpr = 1: the whale is a subtle background; keeps the glitch cheap
+    canvas.width = rectW; canvas.height = rectH;
+    ctx.setTransform(1, 0, 0, 1, 0, 0);
+
+    let dw, dh;
+    if (rectW / rectH > IMG_ASPECT) { dh = rectH; dw = dh * IMG_ASPECT; }
+    else { dw = rectW; dh = dw / IMG_ASPECT; }
+    const dx = (rectW - dw) / 2, dy = (rectH - dh) / 2;
+
+    fontSize = Math.max(9, Math.round(dw / 74));
+    const cw = fontSize * 0.62, chh = fontSize * 1.15;
+    const cols = Math.floor(dw / cw), rows = Math.floor(dh / chh);
+
+    // sample the whale silhouette
+    const off = document.createElement("canvas");
+    off.width = rectW; off.height = rectH;
+    const octx = off.getContext("2d");
+    octx.drawImage(img, dx, dy, dw, dh);
+    const data = octx.getImageData(0, 0, rectW, rectH).data;
+
+    // remember the grid mapping so we can hit-test the pointer against the shape
+    gDx = dx; gDy = dy; gCw = cw; gChh = chh; gCols = cols; gRows = rows;
+    mask = new Uint8Array(cols * rows);
+
+    const cells = [];
+    let wi = 0;
+    for (let r = 0; r < rows; r++) {
+      for (let c = 0; c < cols; c++) {
+        const px = Math.floor(dx + c * cw + cw / 2);
+        const py = Math.floor(dy + r * chh + chh / 2);
+        if (px < 0 || py < 0 || px >= rectW || py >= rectH) continue;
+        if (data[(py * rectW + px) * 4 + 3] > 70) {
+          mask[r * cols + c] = 1;
+          cells.push({ x: dx + c * cw, y: dy + r * chh, ch: WORDS[wi % WORDS.length] });
+          wi++;
+        }
+      }
+    }
+
+    baseBuf = renderBuffer(BLUE, cells);
+    redBuf = renderBuffer(RED, cells);
+    cyanBuf = renderBuffer(CYAN, cells);
+
+    startT = firstBuild ? performance.now() : (performance.now() - 3000);
+    firstBuild = false;
+    if (reduce) { drawClean(1); return; }
+    ensureRunning();
+  }
+
+  function ensureRunning() {
+    if (running) return;
+    running = true;
+    lastRender = 0;
+    cancelAnimationFrame(raf);
+    raf = requestAnimationFrame(draw);
+  }
+
+  // Global RGB split + micro jitter every tick (the constant chromatic shake);
+  // most slices stay put, a few tear sideways for the occasional datamosh.
+  function updateGlitch(now) {
+    const t = Math.floor(now / 70);
+    if (t === lastTick) return;
+    lastTick = t;
+    split = 3 + Math.random() * 3;                                  // 3–6px chromatic offset
+    jitter = { x: (Math.random() * 2 - 1) * 2, y: (Math.random() * 2 - 1) * 1.5 };
+    slices = [];
+    let y = 0;
+    while (y < rectH) {
+      const h = 8 + Math.floor(Math.random() * 34);
+      const dx = Math.random() < 0.16 ? (Math.random() * 2 - 1) * (6 + Math.random() * 22) : 0;
+      slices.push({ y: y, h: Math.min(h, rectH - y), dx: dx });
+      y += h;
+    }
+    if (Math.random() < 0.10) { split += 4; jitter.x *= 2.5; }      // occasional big jump
+  }
+
+  function drawClean(alpha) {
+    ctx.clearRect(0, 0, rectW, rectH);
+    ctx.globalAlpha = alpha;
+    ctx.drawImage(baseBuf, 0, 0);
+    ctx.globalAlpha = 1;
+  }
+
+  function drawGlitch() {
+    ctx.clearRect(0, 0, rectW, rectH);
+    const jx = jitter.x, jy = jitter.y, S = split;
+    for (let i = 0; i < slices.length; i++) {
+      const s = slices[i];
+      const dx = jx + s.dx, dy = jy + s.y;
+      // red ghost left, cyan ghost right, then the base on top (chromatic split)
+      ctx.globalAlpha = 0.9;
+      ctx.drawImage(redBuf,  0, s.y, rectW, s.h, dx - S, dy, rectW, s.h);
+      ctx.drawImage(cyanBuf, 0, s.y, rectW, s.h, dx + S, dy, rectW, s.h);
+      ctx.globalAlpha = 1;
+      ctx.drawImage(baseBuf, 0, s.y, rectW, s.h, dx, dy, rectW, s.h);
+    }
+  }
+
+  function draw(now) {
+    if (now - lastRender < 33) { raf = requestAnimationFrame(draw); return; }  // ~30fps
+    lastRender = now;
+
+    const fade = Math.min(1, (now - startT) / 1100);
+    const fadingIn = fade < 1;
+
+    if (hovering && !fadingIn) {
+      updateGlitch(now);
+      drawGlitch();
+    } else {
+      drawClean(fade);
+    }
+
+    if (fadingIn || hovering) {
+      raf = requestAnimationFrame(draw);
+    } else {
+      running = false;   // settle on the clean frame and stop
+    }
+  }
+
+  // Glitch only while the pointer is over the whale silhouette itself (not the
+  // whole hero). Hit-tests the live pointer against the occupancy mask, so it
+  // reliably stops the moment the cursor leaves the shape / window.
+  function setHover(on) {
+    if (on) { if (!hovering) { hovering = true; ensureRunning(); } }
+    else { hovering = false; }
+  }
+  function overWhale(cx, cy) {
+    if (!mask) return false;
+    const rect = canvas.getBoundingClientRect();
+    if (cx < rect.left || cx > rect.right || cy < rect.top || cy > rect.bottom) return false;
+    const x = cx - rect.left, y = cy - rect.top;   // canvas renders at dpr=1
+    const c = Math.floor((x - gDx) / gCw), r = Math.floor((y - gDy) / gChh);
+    for (let rr = r - 1; rr <= r + 1; rr++) {
+      for (let cc = c - 1; cc <= c + 1; cc++) {
+        if (rr >= 0 && rr < gRows && cc >= 0 && cc < gCols && mask[rr * gCols + cc]) return true;
+      }
+    }
+    return false;
+  }
+  if (!reduce) {
+    window.addEventListener("pointermove", e => {
+      if (e.pointerType && e.pointerType !== "mouse") return;
+      setHover(overWhale(e.clientX, e.clientY));
+    }, { passive: true });
+    window.addEventListener("blur", () => setHover(false));
+    document.addEventListener("mouseleave", () => setHover(false));
+  }
+
+  let rt;
+  window.addEventListener("resize", () => {
+    clearTimeout(rt);
+    rt = setTimeout(build, 200);
+  });
+  window.addEventListener("load", build);
+});
