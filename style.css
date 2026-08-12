@@ -1054,11 +1054,27 @@ body.no-scroll {
     align-items: center;
     box-shadow: var(--box-shadow);
     transition: var(--transition);
+    text-decoration: none;
+    color: inherit;
 }
 
 .certification-card:hover {
     transform: translateY(-5px);
     box-shadow: 0 15px 30px -10px rgba(0, 0, 0, 0.14);
+}
+
+.certification-link-icon {
+    color: var(--text-muted);
+    font-size: var(--fs-xs);
+    margin-left: var(--spacing-s);
+    flex-shrink: 0;
+    opacity: 0.5;
+    transition: var(--transition);
+}
+
+.certification-card:hover .certification-link-icon {
+    color: var(--accent-color);
+    opacity: 1;
 }
 
 .certification-logo {
