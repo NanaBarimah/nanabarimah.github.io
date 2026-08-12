@@ -4,9 +4,13 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Etwi Barimah Appiah | DevOps & Cloud Engineer</title>
+    <link rel="icon" type="image/png" href="assets/favicon.png">
+    <link rel="apple-touch-icon" href="assets/favicon.png">
     <link rel="stylesheet" href="style.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
-    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@300;400;500;600;700&family=Space+Mono:wght@400;700&display=swap" rel="stylesheet">
 </head>
 <body>
     <!-- Header Navigation -->
@@ -15,23 +19,18 @@
             <nav>
                 <!-- Profile headshot: moved before the logo -->
                 <div class="header-profile">
-                    <img src="assets/headshot.jpg" alt="Etwi Barimah Appiah" class="profile-pic">
+                    <img src="assets/headshot-white.jpg" alt="Etwi Barimah Appiah" class="profile-pic">
                 </div>
+                <a href="#home" class="header-name">Etwi Barimah Appiah</a>
                 <div class="logo">
-                    <a href="#home"><span>&lt;</span> NEBA <span>/&gt;</span></a>
+                    <a href="#home" id="logoWave" aria-label="NEBA — home"><span class="logo-mark">&lt;</span><span class="logo-name">NEBA</span><span class="logo-mark">/&gt;</span></a>
                 </div>
                 <ul class="nav-links">
                     <li><a href="#home">Home</a></li>
                     <li><a href="#about">About</a></li>
-                    <li><a href="#skills">Skills</a></li>
                     <li><a href="#projects">Projects</a></li>
-                    <li><a href="#experience">Experience</a></li>
-                    <li><a href="#education">Education</a></li>
-                    <li><a href="#certifications">Certifications</a></li>
-                    <li><a href="#publications">Publications</a></li>
-                    <li><a href="#contact">Contact</a></li>
                 </ul>
-                <div class="hamburger">
+                <div class="hamburger" id="hamburger" role="button" tabindex="0" aria-label="Open menu" aria-expanded="false" aria-controls="menuOverlay">
                     <div class="line"></div>
                     <div class="line"></div>
                     <div class="line"></div>
@@ -40,16 +39,30 @@
         </div>
     </header>
 
+    <!-- Full-screen menu overlay -->
+    <div class="menu-overlay" id="menuOverlay">
+        <nav class="menu-overlay-links">
+            <a href="#home" class="overlay-primary">Home</a>
+            <a href="#about" class="overlay-primary">About</a>
+            <a href="#projects" class="overlay-primary">Projects</a>
+            <a href="#skills">Skills</a>
+            <a href="#experience">Experience</a>
+            <a href="#education">Education</a>
+            <a href="#certifications">Certifications</a>
+            <a href="#publications">Publications</a>
+        </nav>
+    </div>
+
     <!-- Hero Section -->
     <section id="home" class="hero">
         <div class="container">
             <div class="hero-content">
                 <div class="hero-text">
-                    <h1>Etwi Barimah Appiah</h1>
-                    <h2>DevOps &amp; Cloud Engineer</h2>
-                    <p>DevOps Engineer with expertise in AWS, Kubernetes (EKS), Terraform, and CI/CD automation. Focused on delivering scalable, secure, and resilient infrastructure to accelerate software delivery and improve operational efficiency.</p>
+                    <h1><span class="greet">Hi, I'm</span> <span class="name">Barimah</span></h1>
+                    <h2 class="hero-professions" id="heroProfessions" aria-label="DevOps & Cloud Engineer / NLP Researcher"></h2>
+                    <p><span class="profession">DevOps Engineer</span> with expertise in AWS, Kubernetes (EKS), Terraform, and CI/CD automation. Focused on delivering scalable, secure, and resilient infrastructure to accelerate software delivery and improve operational efficiency.</p>
                     <div class="cta-buttons">
-                        <a href="#contact" class="btn primary-btn">Get In Touch</a>
+                        <a href="mailto:barimahappiah@gmail.com" class="btn primary-btn">Get In Touch</a>
                         <a href="#projects" class="btn secondary-btn">View Projects</a>
                     </div>
                     <div class="social-icons">
@@ -80,7 +93,7 @@
             </div>
             <div class="about-content">
                 <div class="about-text">
-                    <p>Experienced DevOps Engineer with over 3 years of proven success in architecting, deploying, and managing cloud-native infrastructure to support scalable, secure, and highly available systems. Skilled in infrastructure automation, CI/CD pipeline development, and observability engineering for mission-critical, distributed environments. Proficient in a wide range of technologies including AWS (EKS, RDS, Lambda), Kubernetes, Terraform, Prometheus/Grafana, and GitOps workflows. Committed to advancing infrastructure as code, improving system resilience and compliance, and driving operational efficiency through automation and continuous improvement.</p>
+                    <p>Experienced <span class="profession">DevOps Engineer</span> with over 3 years of proven success in architecting, deploying, and managing cloud-native infrastructure to support scalable, secure, and highly available systems. Skilled in <strong>infrastructure automation</strong>, <strong>CI/CD</strong> pipeline development, and observability engineering for mission-critical, distributed environments. Proficient in a wide range of technologies including <strong>AWS (EKS, RDS, Lambda)</strong>, <strong>Kubernetes</strong>, <strong>Terraform</strong>, <strong>Prometheus/Grafana</strong>, and <strong>GitOps</strong> workflows. Committed to advancing <strong>infrastructure as code</strong>, improving system resilience and compliance, and driving operational efficiency through automation and continuous improvement.</p>
                 </div>
                 <div class="contact-info">
                     <div class="contact-item">
@@ -123,7 +136,7 @@
                     <h3>CI/CD & Automation</h3>
                     <div class="skills-grid">
                         <div class="skill-item"><span>Jenkins</span></div>
-                        <div class="skill-item"><span>GitLab CI</span></div>
+                        <div class="skill-item"><span>GitHub Actions</span></div>
                         <div class="skill-item"><span>AWS CodeCatalyst Workflow</span></div>
                         <div class="skill-item"><span>Ansible</span></div>
                     </div>
@@ -155,6 +168,19 @@
                         <div class="skill-item"><span>Python</span></div>
                         <div class="skill-item"><span>FastAPI</span></div>
                         <div class="skill-item"><span>Echo</span></div>
+                    </div>
+                </div>
+                <div class="skill-category skill-category--wide">
+                    <h3>NLP &amp; ML Research</h3>
+                    <div class="skills-grid">
+                        <div class="skill-item"><span>LDA Topic Modelling</span></div>
+                        <div class="skill-item"><span>Dual-head MLP</span></div>
+                        <div class="skill-item"><span>BERT</span></div>
+                        <div class="skill-item"><span>Transformer Architectures</span></div>
+                        <div class="skill-item"><span>Sentiment Analysis (TBSA, ABSA)</span></div>
+                        <div class="skill-item"><span>PyTorch</span></div>
+                        <div class="skill-item"><span>Scikit-learn</span></div>
+                        <div class="skill-item"><span>Causal Inference self-study (SCMs, do-calculus, CEVAE)</span></div>
                     </div>
                 </div>
             </div>
@@ -384,12 +410,60 @@
             <div class="section-header">
                 <h2>Publications</h2>
                 <div class="underline"></div>
+                <p class="section-subtitle">Peer-reviewed research in natural language processing and aspect-based sentiment analysis</p>
             </div>
-            <ul>
-                <li><strong>Prediction of Topic Sentiment Polarity of Customers' Reviews from Business Attributes using Dual-head MLP</strong> — 27th International Symposium on Artificial Life and Robotics</li>
-                <li><strong>The Self-attention network with BERT for aspect-based sentiment analysis: estimation of aspect categories and aspect phrases</strong> — 83rd National Conference of the Society for Information Processing</li>
-                <li><strong>Neural networks using pre-learned language models: Estimation of polarity and target phrases of multiple cross-categories</strong> — 35th National Congress of the Society of Artificial Intelligence</li>
-            </ul>
+            <div class="publications-container">
+                <article class="publication-item">
+                    <div class="publication-index">01</div>
+                    <div class="publication-content">
+                        <div class="publication-tags">
+                            <span class="publication-type type-intl">International Conference</span>
+                            <span class="publication-tag">Sentiment Analysis</span>
+                            <span class="publication-tag">Dual-head MLP</span>
+                        </div>
+                        <h3>Prediction of Topic Sentiment Polarity of Customers' Reviews from Business Attributes using Dual-head MLP</h3>
+                        <p class="publication-authors"><span class="me">Etwi Barimah Appiah</span>, Clifford Broni-Bediako, Koichi Nagatsuka, and Masayasu Atsumi</p>
+                        <div class="publication-meta">
+                            <span><i class="fas fa-landmark"></i> 27th International Symposium on Artificial Life and Robotics (AROB 2022)</span>
+                            <span><i class="far fa-calendar-alt"></i> 2022</span>
+                        </div>
+                    </div>
+                </article>
+                <article class="publication-item">
+                    <div class="publication-index">02</div>
+                    <div class="publication-content">
+                        <div class="publication-tags">
+                            <span class="publication-type type-natl">National Conference</span>
+                            <span class="publication-tag">BERT</span>
+                            <span class="publication-tag">Self-attention</span>
+                        </div>
+                        <h3>The Self-attention Network with BERT for Aspect-based Sentiment Analysis – Estimation of Aspect Categories and Aspect Phrases</h3>
+                        <p class="publication-authors">Yohie Miura, <span class="me">Etwi Barimah Appiah</span>, and Masayasu Atsumi</p>
+                        <div class="publication-meta">
+                            <span><i class="fas fa-landmark"></i> 83rd National Conference of the Information Processing Society of Japan (IPSJ)</span>
+                            <span><i class="far fa-calendar-alt"></i> March 2021</span>
+                            <span><i class="fas fa-map-marker-alt"></i> Japan</span>
+                        </div>
+                    </div>
+                </article>
+                <article class="publication-item">
+                    <div class="publication-index">03</div>
+                    <div class="publication-content">
+                        <div class="publication-tags">
+                            <span class="publication-type type-natl">National Conference</span>
+                            <span class="publication-tag">Language Models</span>
+                            <span class="publication-tag">Cross-category</span>
+                        </div>
+                        <h3>Neural Networks Using Pre-learned Language Models – Estimation of Polarity and Target Phrases of Multiple Cross-categories</h3>
+                        <p class="publication-authors">Yohie Miura, <span class="me">Etwi Barimah Appiah</span>, and Masayasu Atsumi</p>
+                        <div class="publication-meta">
+                            <span><i class="fas fa-landmark"></i> 35th Annual Conference of the Japanese Society for Artificial Intelligence (JSAI)</span>
+                            <span><i class="far fa-calendar-alt"></i> June 2021</span>
+                            <span><i class="fas fa-map-marker-alt"></i> Online, Japan</span>
+                        </div>
+                    </div>
+                </article>
+            </div>
         </div>
     </section>
 
@@ -449,58 +523,31 @@
         </div>
     </section>
 
-    <!-- Contact Section -->
-    <section id="contact" class="contact">
-        <div class="container">
-            <div class="section-header"><h2>Get In Touch</h2><div class="underline"></div></div>
-            <div class="contact-container">
-                <div class="contact-info-container">
-                    <div class="contact-info-item">
-                        <div class="icon"><i class="fas fa-map-marker-alt"></i></div>
-                        <div class="text"><p>Yokohama, Japan</p></div>
-                    </div>
-                    <div class="contact-info-item">
-                        <div class="icon"><i class="fas fa-envelope"></i></div>
-                        <div class="text"><p>barimahappiah@gmail.com</p></div>
-                    </div>
-                    <div class="contact-info-item">
-                        <div class="icon"><i class="fab fa-linkedin"></i></div>
-                        <div class="text"><p><a href="https://linkedin.com/in/etwi-barimah-appiah" target="_blank">Connect with me</a></p></div>
-                    </div>
-                </div>
-                <div class="contact-form-container">
-                    <form id="contact-form">
-                        <div class="form-group">
-                            <input type="text" id="name" placeholder="Your Name" required>
-                        </div>
-                        <div class="form-group">
-                            <input type="email" id="email" placeholder="Your Email" required>
-                        </div>
-                        <div class="form-group">
-                            <input type="text" id="subject" placeholder="Subject" required>
-                        </div>
-                        <div class="form-group">
-                            <textarea id="message" placeholder="Your Message" required></textarea>
-                        </div>
-                        <button type="submit" class="btn primary-btn">Send Message</button>
-                    </form>
-                </div>
-            </div>
-        </div>
-    </section>
 
     <!-- Footer -->
     <footer>
         <div class="container">
-            <div class="footer-content">
-                <div class="footer-logo"><a href="#home"><span>&lt;</span> NEBA <span>/&gt;</span></a></div>
-                <div class="footer-social">
-                    <a href="https://linkedin.com/in/etwi-barimah-appiah" target="_blank"><i class="fab fa-linkedin"></i></a>
-                    <a href="https://github.com/NanaBarimah" target="_blank"><i class="fab fa-github"></i></a>
-                    <a href="https://www.credly.com/users/etwi-barimah-appiah/badges" target="_blank"><i class="fas fa-award"></i></a>
+            <div class="footer-grid">
+                <div class="footer-col">
+                    <h6>Location</h6>
+                    <p class="footer-static">Yokohama, Japan</p>
                 </div>
-                <div class="footer-links"><a href="#home">Home</a><a href="#about">About</a><a href="#projects">Projects</a><a href="#contact">Contact</a></div>
-                <div class="footer-bottom"><p>&copy; 2025 Etwi Barimah Appiah. All Rights Reserved.</p></div>
+                <div class="footer-col">
+                    <h6>Email</h6>
+                    <a href="mailto:barimahappiah@gmail.com"><p>barimahappiah@gmail.com</p></a>
+                </div>
+                <div class="footer-col">
+                    <h6>Follow Me</h6>
+                    <div class="footer-social">
+                        <a href="https://linkedin.com/in/etwi-barimah-appiah" target="_blank" rel="noopener noreferrer" aria-label="LinkedIn"><i class="fab fa-linkedin-in"></i></a>
+                        <a href="https://github.com/NanaBarimah" target="_blank" rel="noopener noreferrer" aria-label="GitHub"><i class="fab fa-github"></i></a>
+                        <a href="https://www.credly.com/users/etwi-barimah-appiah/badges" target="_blank" rel="noopener noreferrer" aria-label="Credly"><i class="fas fa-award"></i></a>
+                    </div>
+                </div>
+                <div class="footer-col footer-copyright">
+                    <p>Copyright &copy; 2026</p>
+                    <p>Etwi Barimah Appiah.</p>
+                </div>
             </div>
         </div>
     </footer>

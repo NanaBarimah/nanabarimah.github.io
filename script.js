@@ -13,23 +13,37 @@ window.addEventListener('scroll', () => {
   header.classList.toggle('header-scroll', window.scrollY > 50);
 });
 
-// Mobile Navigation
-hamburger.addEventListener('click', () => {
-  navLinks.classList.toggle('nav-active');
-  hamburger.classList.toggle('active');
-  document.body.classList.toggle('no-scroll');
-});
+// Full-screen menu overlay (hamburger)
+const menuOverlay = document.getElementById('menuOverlay');
 
-// Close mobile menu on link click
-navLinksItems.forEach(item => {
-  item.addEventListener('click', () => {
-    if (navLinks.classList.contains('nav-active')) {
-      navLinks.classList.remove('nav-active');
-      hamburger.classList.remove('active');
-      document.body.classList.remove('no-scroll');
-    }
+function openMenu() {
+  menuOverlay.classList.add('open');
+  hamburger.classList.add('active');
+  document.body.classList.add('no-scroll');
+  hamburger.setAttribute('aria-expanded', 'true');
+}
+function closeMenu() {
+  menuOverlay.classList.remove('open');
+  hamburger.classList.remove('active');
+  document.body.classList.remove('no-scroll');
+  hamburger.setAttribute('aria-expanded', 'false');
+}
+function toggleMenu() {
+  if (menuOverlay.classList.contains('open')) closeMenu(); else openMenu();
+}
+
+if (hamburger && menuOverlay) {
+  hamburger.addEventListener('click', toggleMenu);
+  hamburger.addEventListener('keydown', e => {
+    if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); toggleMenu(); }
   });
-});
+  // Close when any overlay link is clicked
+  menuOverlay.querySelectorAll('a').forEach(a => a.addEventListener('click', closeMenu));
+  // Close when the backdrop (not a link) is clicked
+  menuOverlay.addEventListener('click', e => { if (e.target === menuOverlay) closeMenu(); });
+  // Close on Escape
+  document.addEventListener('keydown', e => { if (e.key === 'Escape') closeMenu(); });
+}
 
 // Theme toggle (only if the elements exist)
 if (themeToggle && moonIcon && sunIcon) {
@@ -137,4 +151,112 @@ document.addEventListener("DOMContentLoaded", () => {
   // run immediately, then every 3s
   rotateKeyword();
   setInterval(rotateKeyword, 3000);
+});
+
+// Animated profession — rolling triangular prism per character (kobina.me concept)
+document.addEventListener("DOMContentLoaded", () => {
+  const host = document.getElementById("heroProfessions");
+  if (!host) return;
+
+  const words = ["DevOps & Cloud Engineer", "NLP Researcher"];
+  const maxLen = Math.max(...words.map(w => w.length));
+  const STAGGER = 35;     // per-character delay via transition-delay
+  const HOLD = 2400;      // pause between rolls
+  const reduce = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+
+  const pad = w => w.padEnd(maxLen, " ");
+  const padded = words.map(pad);
+  let cur = 0;      // index of currently shown word
+  let step = 0;     // total 120deg roll steps taken
+
+  // Build a 3-face prism per character position. Face (step % 3) is the one at
+  // the front; rolling -120deg brings the next face forward.
+  const cells = [];
+  const first = padded[0];
+  for (let i = 0; i < maxLen; i++) {
+    const ch = document.createElement("span"); ch.className = "pchar";
+    const cube = document.createElement("span"); cube.className = "pcube";
+    const faces = [];
+    for (let f = 0; f < 3; f++) {
+      const face = document.createElement("span");
+      face.className = "pface f" + f;
+      face.textContent = f === 0 ? first[i] : " ";
+      cube.appendChild(face);
+      faces.push(face);
+    }
+    ch.appendChild(cube);
+    host.appendChild(ch);
+    cells.push({ cube, faces });
+  }
+
+  function roll() {
+    const next = (cur + 1) % words.length;
+    const nw = padded[next];
+    step += 1;
+    const frontFace = ((step % 3) + 3) % 3;   // face that will be at the front
+    const angle = -120 * step;
+
+    cells.forEach((c, i) => {
+      // Put the new character on the face that's about to roll into view
+      c.faces[frontFace].textContent = nw[i];
+      if (reduce) {
+        c.cube.style.transform = "rotateX(" + angle + "deg)";
+      } else {
+        c.cube.style.transitionDelay = (i * STAGGER) + "ms";
+        c.cube.style.transform = "rotateX(" + angle + "deg)";
+      }
+    });
+
+    cur = next;
+    setTimeout(roll, HOLD + maxLen * STAGGER);
+  }
+
+  setTimeout(roll, HOLD);
+});
+
+// <NEBA/> logo — rolling-prism wave (same mechanism as the profession)
+document.addEventListener("DOMContentLoaded", () => {
+  const link = document.getElementById("logoWave");
+  if (!link) return;
+
+  const chars = ["<", "N", "E", "B", "A", "/", ">"];
+  const isMark = c => "<>/".includes(c);
+  const reduce = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+
+  link.innerHTML = "";
+  const wrap = document.createElement("span");
+  wrap.className = "logo-wave-inner";
+  const cubes = [];
+  chars.forEach(c => {
+    const lc = document.createElement("span");
+    lc.className = "lchar";
+    lc.style.color = isMark(c) ? "var(--accent-color)" : "var(--text-primary)";
+    const cube = document.createElement("span");
+    cube.className = "lcube";
+    for (let f = 0; f < 3; f++) {
+      const face = document.createElement("span");
+      face.className = "lface l" + f;
+      face.textContent = c;
+      cube.appendChild(face);
+    }
+    lc.appendChild(cube);
+    wrap.appendChild(lc);
+    cubes.push(cube);
+  });
+  link.appendChild(wrap);
+
+  if (reduce) return;
+
+  const STAGGER = 55, DURATION = 500, PAUSE = 2600;
+  let step = 0;
+  function wave() {
+    step += 1;
+    const angle = -120 * step;
+    cubes.forEach((cube, i) => {
+      cube.style.transitionDelay = (i * STAGGER) + "ms";
+      cube.style.transform = "rotateX(" + angle + "deg)";
+    });
+    setTimeout(wave, PAUSE + cubes.length * STAGGER + DURATION);
+  }
+  setTimeout(wave, 1600);
 });
