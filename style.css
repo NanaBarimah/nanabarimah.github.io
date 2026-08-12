@@ -1064,8 +1064,8 @@ body.no-scroll {
 }
 
 .certification-link-icon {
-    width: 18px;
-    height: 18px;
+    color: var(--text-muted);
+    font-size: var(--fs-s);
     margin-left: var(--spacing-s);
     flex-shrink: 0;
     opacity: 0.6;
@@ -1073,6 +1073,7 @@ body.no-scroll {
 }
 
 .certification-card:hover .certification-link-icon {
+    color: var(--accent-color);
     opacity: 1;
     transform: scale(1.1);
 }
