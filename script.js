@@ -45,6 +45,24 @@ if (hamburger && menuOverlay) {
   document.addEventListener('keydown', e => { if (e.key === 'Escape') closeMenu(); });
 }
 
+// Download-resume dropdown (header)
+(function () {
+  const wrap   = document.getElementById('resumeDownload');
+  const toggle = document.getElementById('resumeToggle');
+  if (!wrap || !toggle) return;
+
+  const open  = () => { wrap.classList.add('open');  toggle.setAttribute('aria-expanded', 'true');  };
+  const close = () => { wrap.classList.remove('open'); toggle.setAttribute('aria-expanded', 'false'); };
+
+  toggle.addEventListener('click', e => {
+    e.stopPropagation();
+    wrap.classList.contains('open') ? close() : open();
+  });
+  document.addEventListener('click', e => { if (!wrap.contains(e.target)) close(); });
+  document.addEventListener('keydown', e => { if (e.key === 'Escape') close(); });
+  wrap.querySelectorAll('.resume-menu a').forEach(a => a.addEventListener('click', close));
+})();
+
 // Theme toggle (only if the elements exist)
 if (themeToggle && moonIcon && sunIcon) {
   themeToggle.addEventListener('click', () => {
